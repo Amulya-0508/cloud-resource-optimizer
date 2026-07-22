@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI-Powered Cloud Resource Optimization & Auto-Scaling System</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Lucide Icons & FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body class="dark-theme">
+
+    <!-- App Container -->
+    <div class="app-layout">
+        
+        <!-- Sidebar Navigation -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <div class="logo-icon">
+                    <i class="fa-solid fa-cloud-bolt"></i>
+                </div>
+                <div class="logo-text">
+                    <h2>CloudOpt<span>.AI</span></h2>
+                    <p>Resource & Cost Engine</p>
+                </div>
+            </div>
+
+            <nav class="sidebar-nav">
+                <a href="#overview" class="nav-item active" data-tab="overview">
+                    <i class="fa-solid fa-chart-line"></i> <span>Live Dashboard</span>
+                </a>
+                <a href="#fleet" class="nav-item" data-tab="fleet">
+                    <i class="fa-solid fa-server"></i> <span>Cloud Fleet</span>
+                    <span class="badge badge-info" id="nav-fleet-count">5</span>
+                </a>
+                <a href="#forecasting" class="nav-item" data-tab="forecasting">
+                    <i class="fa-solid fa-brain"></i> <span>ML Forecasting</span>
+                </a>
+                <a href="#recommendations" class="nav-item" data-tab="recommendations">
+                    <i class="fa-solid fa-wand-magic-sparkles"></i> <span>Rightsizing & Savings</span>
+                    <span class="badge badge-warning" id="nav-rec-count">0</span>
+                </a>
+                <a href="#scaling-logs" class="nav-item" data-tab="scaling-logs">
+                    <i class="fa-solid fa-sliders"></i> <span>Auto-Scale Audit</span>
+                </a>
+            </nav>
+
+            <div class="sidebar-footer">
+                <div class="system-status">
+                    <span class="pulse-dot"></span>
+                    <div class="status-info">
+                        <div class="status-title">Telemetry Engine</div>
+                        <div class="status-subtitle">3s Refresh Active</div>
+                    </div>
+                </div>
+                <button class="btn btn-outline-primary btn-sm btn-block" id="btn-open-chatbot">
+                    <i class="fa-solid fa-robot"></i> AI Cloud Assistant
+                </button>
+            </div>
+        </aside>
+
+        <!-- Main Workspace -->
+        <main class="main-content">
+            
+            <!-- Top Navigation Bar -->
+            <header class="top-header">
+                <div class="header-left">
+                    <h1 id="page-title">Live Resource Telemetry</h1>
+                    <p class="subtitle">Real-time CPU, RAM, Disk monitoring & machine learning prediction</p>
+                </div>
+
+                <div class="header-stats">
+                    <div class="stat-pill">
+                        <div class="stat-icon"><i class="fa-solid fa-dollar-sign"></i></div>
+                        <div class="stat-data">
+                            <span class="stat-label">Monthly Cloud Burn</span>
+                            <span class="stat-value" id="hdr-monthly-burn">$0.00</span>
+                        </div>
+                    </div>
+                    <div class="stat-pill highlight">
+                        <div class="stat-icon"><i class="fa-solid fa-piggy-bank"></i></div>
+                        <div class="stat-data">
+                            <span class="stat-label">Potential Monthly Savings</span>
+                            <span class="stat-value" id="hdr-potential-savings">$0.00</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="header-actions">
+                    <button class="btn btn-secondary" id="btn-retrain-ml" title="Retrain Scikit-Learn Model">
+                        <i class="fa-solid fa-rotate"></i> Train ML Model
+                    </button>
+                    <button class="btn btn-primary" id="btn-login-modal">
+                        <i class="fa-solid fa-user-shield"></i> <span id="user-display">Admin Login</span>
+                    </button>
+                </div>
+            </header>
+
+            <!-- Content Area -->
+            <div class="content-body">
+                
+                <!-- TAB 1: OVERVIEW & REAL-TIME MONITORING -->
+                <section class="tab-pane active" id="tab-overview">
+                    
+                    <!-- Metrics Gauge Grid -->
+                    <div class="metrics-grid">
+                        <div class="metric-card glass-card">
+                            <div class="card-header-small">
+                                <span class="metric-title">Average Cluster CPU</span>
+                                <i class="fa-solid fa-microchip metric-icon text-cyan"></i>
+                            </div>
+                            <div class="metric-value-row">
+                                <span class="metric-number" id="metric-cpu-val">0.0%</span>
+                                <span class="metric-trend trend-up" id="metric-cpu-trend"><i class="fa-solid fa-arrow-trend-up"></i> Live</span>
+                            </div>
+                            <div class="progress-bar-container">
+                                <div class="progress-bar bar-cyan" id="progress-cpu" style="width: 0%;"></div>
+                            </div>
+                        </div>
+
+                        <div class="metric-card glass-card">
+                            <div class="card-header-small">
+                                <span class="metric-title">Average RAM Memory</span>
+                                <i class="fa-solid fa-memory metric-icon text-purple"></i>
+                            </div>
+                            <div class="metric-value-row">
+                                <span class="metric-number" id="metric-ram-val">0.0%</span>
+                                <span class="metric-trend trend-neutral"><i class="fa-solid fa-minus"></i> Stable</span>
+                            </div>
+                            <div class="progress-bar-container">
+                                <div class="progress-bar bar-purple" id="progress-ram" style="width: 0%;"></div>
+                            </div>
+                        </div>
+
+                        <div class="metric-card glass-card">
+                            <div class="card-header-small">
+                                <span class="metric-title">Cluster Disk Space</span>
+                                <i class="fa-solid fa-hard-drive metric-icon text-emerald"></i>
+                            </div>
+                            <div class="metric-value-row">
+                                <span class="metric-number" id="metric-disk-val">48.2%</span>
+                                <span class="metric-trend trend-neutral">48.2 GB / 100 GB</span>
+                            </div>
+                            <div class="progress-bar-container">
+                                <div class="progress-bar bar-emerald" id="progress-disk" style="width: 48.2%;"></div>
+                            </div>
+                        </div>
+
+                        <div class="metric-card glass-card">
+                            <div class="card-header-small">
+                                <span class="metric-title">Network I/O Throughput</span>
+                                <i class="fa-solid fa-network-wired metric-icon text-amber"></i>
+                            </div>
+                            <div class="metric-value-row">
+                                <span class="metric-number" id="metric-net-val">0.0 MB/s</span>
+                                <span class="metric-subtext" id="metric-procs-val">50 Processes</span>
+                            </div>
+                            <div class="progress-bar-container">
+                                <div class="progress-bar bar-amber" id="progress-net" style="width: 25%;"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Chart & Node Selector Section -->
+                    <div class="chart-section glass-card">
+                        <div class="chart-header">
+                            <div class="chart-title">
+                                <h3><i class="fa-solid fa-wave-square text-cyan"></i> Real-Time Infrastructure Telemetry Stream</h3>
+                                <p>Live streaming telemetry readings collected every 3 seconds</p>
+                            </div>
+                            <div class="chart-controls">
+                                <label for="node-select">Select Cloud Node:</label>
+                                <select id="node-select" class="form-select">
+                                    <!-- Populated dynamically -->
+                                </select>
+                                <button class="btn btn-warning btn-sm" id="btn-trigger-spike">
+                                    <i class="fa-solid fa-bolt"></i> Simulate Workload Spike
+                                </button>
+                            </div>
+                        </div>
+                        <div class="chart-container">
+                            <canvas id="liveTelemetryChart"></canvas>
+                        </div>
+                    </div>
+
+                </section>
+
+                <!-- TAB 2: CLOUD FLEET MANAGER -->
+                <section class="tab-pane" id="tab-fleet">
+                    <div class="section-intro">
+                        <h2>Cloud Virtual Machine Fleet</h2>
+                        <p>Manage multi-cloud infrastructure across AWS, Azure, GCP, and Local environment</p>
+                    </div>
+                    <div class="fleet-grid" id="fleet-container">
+                        <!-- Instantiated via JS -->
+                    </div>
+                </section>
+
+                <!-- TAB 3: ML FORECASTING -->
+                <section class="tab-pane" id="tab-forecasting">
+                    <div class="section-intro">
+                        <h2>Machine Learning Demand Forecast Engine</h2>
+                        <p>Scikit-Learn Random Forest regression predicting future CPU & RAM demand</p>
+                    </div>
+
+                    <div class="ml-info-row">
+                        <div class="ml-card glass-card">
+                            <div class="ml-card-header">
+                                <i class="fa-solid fa-brain text-cyan"></i> CPU Forecaster Model
+                            </div>
+                            <div class="ml-metrics">
+                                <div class="m-stat"><span class="m-lbl">Algorithm</span><span class="m-val">RandomForestRegressor</span></div>
+                                <div class="m-stat"><span class="m-lbl">R² Accuracy Score</span><span class="m-val text-emerald" id="ml-cpu-r2">0.9240</span></div>
+                                <div class="m-stat"><span class="m-lbl">Mean Absolute Error (MAE)</span><span class="m-val text-cyan" id="ml-cpu-mae">1.84%</span></div>
+                            </div>
+                        </div>
+
+                        <div class="ml-card glass-card">
+                            <div class="ml-card-header">
+                                <i class="fa-solid fa-chart-line text-purple"></i> Anomaly Detector
+                            </div>
+                            <div class="ml-metrics">
+                                <div class="m-stat"><span class="m-lbl">Algorithm</span><span class="m-val">IsolationForest</span></div>
+                                <div class="m-stat"><span class="m-lbl">Contamination Rate</span><span class="m-val">3.0%</span></div>
+                                <div class="m-stat"><span class="m-lbl">Status</span><span class="m-val text-emerald">Active Ingestion</span></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="chart-section glass-card">
+                        <div class="chart-header">
+                            <div class="chart-title">
+                                <h3><i class="fa-solid fa-compass-drafting text-purple"></i> Multi-Horizon Resource Demand Forecast (+15m, +1h, +6h, +24h)</h3>
+                                <p>Comparing actual current usage vs predicted demand horizons with confidence bounds</p>
+                            </div>
+                            <div class="chart-controls">
+                                <select id="forecast-node-select" class="form-select"></select>
+                            </div>
+                        </div>
+                        <div class="chart-container">
+                            <canvas id="mlForecastChart"></canvas>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- TAB 4: RIGHTSIZING & COST SAVINGS -->
+                <section class="tab-pane" id="tab-recommendations">
+                    <div class="section-intro">
+                        <h2>AI Rightsizing & Cost Optimization Center</h2>
+                        <p>Intelligent rules & ML heuristics recommending optimal instance tiers to eliminate waste</p>
+                    </div>
+
+                    <div class="savings-banner glass-card">
+                        <div class="savings-info">
+                            <i class="fa-solid fa-sack-dollar banner-icon"></i>
+                            <div>
+                                <h3>Total Estimated Monthly Cloud Savings</h3>
+                                <p>By downsizing underutilized nodes and terminating idle resources</p>
+                            </div>
+                        </div>
+                        <div class="savings-amount" id="total-banner-savings">$0.00 / month</div>
+                    </div>
+
+                    <div class="recommendations-list" id="recommendations-container">
+                        <!-- Populated by JS -->
+                    </div>
+                </section>
+
+                <!-- TAB 5: AUTO-SCALE AUDIT LOGS -->
+                <section class="tab-pane" id="tab-scaling-logs">
+                    <div class="section-intro">
+                        <h2>Auto-Scaling & Rightsizing Audit History</h2>
+                        <p>Chronological record of automated and manual cloud scaling events</p>
+                    </div>
+
+                    <div class="table-container glass-card">
+                        <table class="data-table" id="logs-table">
+                            <thead>
+                                <tr>
+                                    <th>Timestamp</th>
+                                    <th>Instance Name</th>
+                                    <th>Scaling Action</th>
+                                    <th>Previous Tier</th>
+                                    <th>New Tier</th>
+                                    <th>Monthly Impact</th>
+                                    <th>Trigger Reason</th>
+                                </tr>
+                            </thead>
+                            <tbody id="scaling-logs-tbody">
+                                <!-- Populated JS -->
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+
+            </div>
+        </main>
+
+        <!-- AI Chatbot Drawer -->
+        <div class="chatbot-drawer" id="chatbot-drawer">
+            <div class="chatbot-header">
+                <div class="chat-title">
+                    <i class="fa-solid fa-robot text-cyan"></i>
+                    <div>
+                        <h4>CloudOpt AI Assistant</h4>
+                        <span class="online-badge">Online</span>
+                    </div>
+                </div>
+                <button class="btn-icon" id="btn-close-chatbot"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            
+            <div class="chatbot-messages" id="chat-messages">
+                <div class="chat-bubble bot-bubble">
+                    Hello! I'm your AI Cloud Resource Assistant. How can I help optimize your infrastructure or analyze resource demand today?
+                </div>
+            </div>
+
+            <div class="chat-pills">
+                <button class="pill-btn" data-query="How can I cut cloud costs?">Cut Cloud Costs?</button>
+                <button class="pill-btn" data-query="Why is CPU high?">CPU Spikes?</button>
+                <button class="pill-btn" data-query="Explain ML forecast">ML Forecaster</button>
+            </div>
+
+            <div class="chatbot-input-row">
+                <input type="text" id="chat-input" placeholder="Ask about cloud costs, ML forecasts, scaling..." />
+                <button class="btn btn-primary btn-icon" id="btn-send-chat"><i class="fa-solid fa-paper-plane"></i></button>
+            </div>
+        </div>
+
+        <!-- Login Modal -->
+        <div class="modal-backdrop" id="login-modal">
+            <div class="modal-card glass-card">
+                <div class="modal-header">
+                    <h3><i class="fa-solid fa-lock text-cyan"></i> CloudOpt Portal Login</h3>
+                    <button class="btn-icon" id="btn-close-modal"><i class="fa-solid fa-xmark"></i></button>
+                </div>
+                <form id="login-form">
+                    <div class="form-group">
+                        <label>Username</label>
+                        <input type="text" id="input-username" class="form-control" value="admin" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Password</label>
+                        <input type="password" id="input-password" class="form-control" value="admin123" required>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary btn-block">Sign In</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Application Script -->
+    <script src="{{ url_for('static', filename='js/dashboard.js') }}"></script>
+</body>
+</html>
