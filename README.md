@@ -1,114 +1,82 @@
-# ☁️ AI-Powered Cloud Resource Optimization & Auto-Scaling System
+# AI-Powered Cloud Resource Optimization
 
-[![Python](https://img.shields.io/badge/Python-3.11+-3776AB?style=for-the-badge&logo=python&logoColor=white)](https://www.python.org/)
-[![Flask](https://img.shields.io/badge/Flask-3.0+-000000?style=for-the-badge&logo=flask&logoColor=white)](https://flask.palletsprojects.com/)
-[![Scikit-Learn](https://img.shields.io/badge/Scikit--Learn-1.3+-F7931E?style=for-the-badge&logo=scikit-learn&logoColor=white)](https://scikit-learn.org/)
-[![SQLite](https://img.shields.io/badge/SQLite-SQLAlchemy-003B57?style=for-the-badge&logo=sqlite&logoColor=white)](https://www.sqlite.org/)
-[![License](https://img.shields.io/badge/License-MIT-green.svg?style=for-the-badge)](LICENSE)
+## Project Summary
+Cloud providers often allocate more computing resources than applications actually need, leading to unnecessary costs and inefficient resource usage. This project develops a cloud-based system that monitors resource utilization (CPU, memory, storage, and network), analyzes usage patterns, and uses machine learning to predict future demand. Based on these predictions, the system recommends or automatically scales cloud resources to improve performance while minimizing costs.
 
-An enterprise-grade, full-stack cloud infrastructure monitoring, machine learning demand forecasting, and cost optimization web application. The system monitors multi-cloud virtual machine resources (CPU, Memory, Disk, Network I/O), predicts future resource demand using Scikit-Learn time-series models, detects compute anomalies, and recommends or automatically scales instances across **AWS**, **Azure**, and **GCP** to minimize cloud waste while maintaining high availability.
+The project demonstrates how artificial intelligence can make cloud infrastructure more efficient, reducing waste and ensuring applications continue to run smoothly even during changes in demand.
 
 ---
 
-## 🎯 Objectives & Features
-
-- **Real-Time Telemetry Stream**: Harvests live machine metrics (`psutil`) alongside simulated multi-cloud cluster nodes (AWS EC2, Azure VMs, GCP Compute Engine).
-- **Machine Learning Demand Forecasting**:
-  - `RandomForestRegressor` & `Ridge` regression models forecasting CPU & RAM demand across **+15m**, **+1h**, **+6h**, and **+24h** horizons.
-  - `IsolationForest` anomaly detector flagging DDoS traffic, runaway processes, or memory leaks.
-- **Cloud Rightsizing & Cost Optimization**:
-  - AWS, Azure, and GCP instance pricing catalog.
-  - Heuristics engine generating **Downsizing** (eliminating idle compute waste) and **Upsizing** recommendations.
-  - Real-time monthly cloud burn & potential savings calculations.
-- **Automated Auto-Scaler**: Auto-scales instance tiers when CPU utilization breaches 88% and logs event history.
-- **Glassmorphic Interactive Dashboard**: Dark theme UI built with HTML5, CSS3, Chart.js, and an embedded **CloudOpt AI Assistant Chatbot**.
+## Objectives
+- Monitor cloud resource usage in real time.
+- Collect and store performance metrics.
+- Predict future resource requirements using machine learning.
+- Recommend or automate resource scaling.
+- Reduce cloud infrastructure costs.
+- Display usage statistics through an interactive dashboard.
 
 ---
 
-## 🏗️ System Architecture
-
-```
- ┌────────────────────────────────────────────────────────┐
- │            Cloud Telemetry & Monitor Daemon            │
- │ (psutil live host metrics + Multi-Cloud VM simulator)  │
- └──────────────────────────┬─────────────────────────────┘
-                            │ (3s Telemetry Ingestion)
-                            ▼
- ┌────────────────────────────────────────────────────────┐
- │           SQLite Database (SQLAlchemy ORM)             │
- │   - ResourceData, ServerInstance, ScalerLogs, Users    │
- └──────────────────────────┬─────────────────────────────┘
-                            │
-               ┌────────────┴────────────┐
-               ▼                         ▼
- ┌───────────────────────────┐ ┌───────────────────────────┐
- │ Machine Learning Pipeline │ │   Optimization Engine     │
- │  - RandomForestForecaster │ │  - Rightsizing Heuristics │
- │  - IsolationForest Anom   │ │  - Cloud Pricing Matrix   │
- └─────────────┬─────────────┘ └─────────────┬─────────────┘
-               │                             │
-               └────────────┬────────────────┘
-                            ▼
- ┌────────────────────────────────────────────────────────┐
- │                 Flask RESTful API                      │
- └──────────────────────────┬─────────────────────────────┘
-                            │
-                            ▼
- ┌────────────────────────────────────────────────────────┐
- │        Interactive Glassmorphic Web Dashboard          │
- └────────────────────────────────────────────────────────┘
-```
-
----
-
-## 🛠️ Technology Stack
-
-- **Backend**: Python 3.11+, Flask, Flask-CORS, SQLAlchemy ORM, Werkzeug
-- **Machine Learning**: Scikit-Learn, Pandas, NumPy, Joblib
-- **System Monitoring**: `psutil`
-- **Frontend**: HTML5, CSS3 (Vanilla Glassmorphism, CSS Custom Variables), JavaScript ES6+
+## Technologies Used
+- **Cloud Platform**: AWS / Azure / GCP / Local Host Simulation
+- **Programming Language**: Python
+- **Backend**: Flask
+- **Frontend**: HTML, CSS, JavaScript
+- **Database**: SQLite / PostgreSQL / MySQL (SQLAlchemy ORM)
+- **Machine Learning**: Scikit-learn, Pandas, NumPy
 - **Visualization**: Chart.js
+- **System Telemetry**: `psutil`
 
 ---
 
-## 🚀 Getting Started
+## System Architecture
 
-### 1. Clone the Repository
-```bash
-git clone https://github.com/YOUR_USERNAME/cloud-resource-optimizer.git
-cd cloud-resource-optimizer
+```
+Cloud Server
+     │
+     ▼
+Resource Monitoring (CPU, RAM, Storage, Network)
+     │
+     ▼
+Database (Telemetry & History)
+     │
+     ▼
+Machine Learning Model (Predict Future Demand)
+     │
+     ▼
+Optimization Engine (Cost Savings & Scaling Rules)
+     │
+     ▼
+Dashboard + Scaling Recommendation
 ```
 
-### 2. Install Dependencies
+---
+
+## Project Modules
+
+1. **User Login**: Secure authentication with role-based access.
+2. **Resource Monitoring**: Live tracking of CPU utilization, memory usage, disk usage, and network traffic.
+3. **Data Storage**: Historical metric storage and logging daemon.
+4. **Machine Learning Prediction**: Scikit-learn time-series forecasting models predicting future compute requirements.
+5. **Optimization Module**: Recommends resource downsizing/upsizing and estimates monthly cloud savings.
+6. **Dashboard**: Interactive graphs, server status cards, prediction charts, auto-scaling logs, and optimization recommendations.
+
+---
+
+## How to Build & Run
+
+### Step 1: Set Up the Environment
+Install required Python packages:
 ```bash
 pip install -r requirements.txt
 ```
 
-### 3. Run the Application
+### Step 2: Run the Application
+Start the Flask web server:
 ```bash
 python app.py
 ```
 
-### 4. Open in Web Browser
-Navigate to `http://127.0.0.1:5000` to access the interactive dashboard.
-
----
-
-## 📊 API Endpoints
-
-| Method | Endpoint | Description |
-|---|---|---|
-| `GET` | `/api/metrics/live` | Live telemetry snapshot for all cluster nodes + cost summary |
-| `GET` | `/api/metrics/history/<id>` | Historical telemetry points for streaming charts |
-| `GET` | `/api/ml/forecast/<id>` | Multi-horizon ML demand predictions (+15m, +1h, +6h, +24h) |
-| `POST` | `/api/ml/train` | Retrain Scikit-Learn ML models on historical telemetry |
-| `GET` | `/api/recommendations` | List rightsizing recommendations & savings matrix |
-| `POST` | `/api/recommendations/apply/<id>` | Execute rightsizing recommendation |
-| `GET` | `/api/scaling/logs` | Chronological audit trail of scaling events |
-| `POST` | `/api/simulate-spike/<id>` | Inject artificial workload spike for auto-scaler demo |
-| `POST` | `/api/chatbot/query` | AI Cloud Assistant chatbot endpoint |
-
----
-
-## 📄 License
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+### Step 3: Open the Dashboard
+Open your web browser and navigate to:
+`http://127.0.0.1:5000`
